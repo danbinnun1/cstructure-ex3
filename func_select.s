@@ -59,25 +59,25 @@ run_func:
 	movzbq	(%rsp),%rsi	#set new char arg
 	leaq	8(%rsp),%rsp	#dealloacte chars memory
 	popq	%rdi		#set first pstring to first arg of replace char
-	pushq	%rsi
-	pushq	%rdx
+	pushq	%rsi		#caller saved register
+	pushq	%rdx		#caller saved register
 	call	replaceChar
-	popq	%rdx
-	popq	%rsi
-	popq	%rdi
-	pushq	%rax
-	pushq	%rsi
-	pushq	%rdx
+	popq	%rdx		#restore caller saved register
+	popq	%rsi		#restore caller saved register
+	popq	%rdi		#set second pstring to first arg of replace char
+	pushq	%rax		#save result of first string
+	pushq	%rsi		#caller saved register
+	pushq	%rdx		#caller saved register
 	call 	replaceChar
-	leaq	1(%rax),%r8
-	popq	%rdx
-	popq	%rsi
+	leaq	1(%rax),%r8	#set fifth arg of printf to second string result
+	popq	%rdx		#restore caller saved register
+	popq	%rsi		#restore caller saved register
 	popq	%rax
-	leaq	1(%rax),%rcx
+	leaq	1(%rax),%rcx	#set fourth arg of printf to first string result
 	movq	$str3,%rdi
-	leaq	-8(%rsp),%rsp
+	leaq	-8(%rsp),%rsp	#set rsp to be 16 align to call printf
 	call	printf
-	leaq	8(%rsp),%rsp
+	leaq	8(%rsp),%rsp	#restore rsp
 	ret
 	
 .L4:

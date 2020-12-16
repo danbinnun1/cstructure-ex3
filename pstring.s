@@ -14,12 +14,13 @@ pstrlen:
 replaceChar:
 	movzbq	(%rdi),%r8		#save length of str
 	movq	$0,%rcx			#set counter to zero
+	jmp	.L2			#check for-loop condition
 .L3:
 	cmpb	%sil,1(%rdi,%rcx,1)	#compare old char and current char
-	addq	$1,%rcx
 	jne	.L2
-	movq	%dl,1(%rdi,%rcx,1)	#set new char if equals
+	movb	%dl,1(%rdi,%rcx,1)	#set new char if equals
 .L2:	
+	addq	$1,%rcx
 	cmpq	%r8,%rcx
 	jl	.L3
 	movq	%rdi,%rax

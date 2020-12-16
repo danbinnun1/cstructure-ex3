@@ -1,7 +1,8 @@
 .section	.rodata
 
 str1:	.string	"first pstring length: %d, second pstring length: %d\n"
-
+str2:	.string	" %c %c"
+str3:	.string	"old char: %c, new char: %c, first string: %s, second string: %s\n"
 .align 8
 
 .L10:
@@ -45,7 +46,40 @@ run_func:
 .L2:
 	nop
 .L3:
-	nop
+	pushq	%rdx		#save second str
+	pushq	%rsi		#save first str
+	leaq	-8(%rsp),%rsp	#allocate space for two characters
+	movq	$str2,%rdi
+	movq	$0,%rax
+	movq	%rsp,%rsi	#set destination for new char
+	leaq	1(%rsp),%rdx
+	movq	$0,%rax
+	call	scanf
+	movzbq	1(%rsp),%rdx	#set old char arg
+	movzbq	(%rsp),%rsi	#set new char arg
+	leaq	8(%rsp),%rsp	#dealloacte chars memory
+	popq	%rdi		#set first pstring to first arg of replace char
+	pushq	%rsi
+	pushq	%rdx
+	call	replaceChar
+	popq	%rdx
+	popq	%rsi
+	popq	%rdi
+	pushq	%rax
+	pushq	%rsi
+	pushq	%rdx
+	call 	replaceChar
+	leaq	1(%rax),%r8
+	popq	%rdx
+	popq	%rsi
+	popq	%rax
+	leaq	1(%rax),%rcx
+	movq	$str3,%rdi
+	leaq	-8(%rsp),%rsp
+	call	printf
+	leaq	8(%rsp),%rsp
+	ret
+	
 .L4:
 	nop
 .L5:

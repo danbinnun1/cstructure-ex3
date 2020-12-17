@@ -93,13 +93,13 @@ swapCase:
         .type   pstrijcmp,       @function
 pstrijcmp:
         cmpb    (%rdi),%dl      #check if index are out of strings borders
-        ja      .L11
+        jae     .L11
         cmpb    (%rdi),%cl
-        ja      .L11
+        jae     .L11
         cmpb    (%rsi),%dl
-        ja      .L11
+        jae     .L11
         cmpb    (%rsi),%dl
-        ja      .L11
+        jae     .L11
 .L13:
 	movb	1(%rdi,%rdx,1),%r8b
 	cmpb	%r8b,1(%rsi,%rdx,1)

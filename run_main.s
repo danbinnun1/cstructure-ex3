@@ -2,12 +2,11 @@
 str1:	.string		"%hhu"
 str2:	.string		"%s"
 str3:	.string		"%d"
-frmt1:	.string		"length is %hhu, str is %s\n"
 
 	.text
-.globl main
-	.type main, @function
-main:
+.globl run_main
+	.type run_main, @function
+run_main:
 	pushq	%rbp
 	movq	%rsp,%rbp 		#setup
 
@@ -23,13 +22,6 @@ main:
 	movzbq	(%rsp),%rcx
 	movb	$0,1(%rsp,%rcx,1)	#set null termination
 
-	leaq	1(%rsp),%rsi
-	movq	%rsi,%rdx
-	movzbq	(%rsp),%rsi
-	movq	$frmt1,%rdi
-	movq	$0,%rax
-	call	printf
-
 	movq	$str1,%rdi
 	leaq	256(%rsp),%rsi
 	movq	$0,%rax
@@ -41,19 +33,18 @@ main:
 	movzbq	256(%rsp),%rcx
 	movb	$0,257(%rsp,%rcx,1)
 
-	leaq	257(%rsp),%rdx
-	movzbq	256(%rsp),%rsi
-	movq	$frmt1,%rdi
-	movq	$0,%rax
-	call	printf
-
 	subq	$16,%rsp
 	movq	$str3,%rdi
 	movq	%rsp,%rsi
 	movq	$0,%rax
 	call	scanf
 
-	movq 	$0,%rax
+	movl	(%rsp),%edi
+	addq	$16,%rsp
+
+	movq	%rsp,%rsi
+	leaq	256(%rsp),%rdx
+	call	run_func
 	movq	%rbp,%rsp
 	pop	%rbp
 	ret

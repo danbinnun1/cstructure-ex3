@@ -5,6 +5,8 @@ str2:	.string	" %c %c"
 str3:	.string	"old char: %c, new char: %c, first string: %s, second string: %s\n"
 str4:	.string	"%hhu"
 str5:	.string	"length: %d, string: %s\n"
+str6:	.string	"compare result: %d\n"
+str7:	.string	"invalid option!\n"
 .align 8
 
 .L10:
@@ -51,7 +53,10 @@ run_func:
 	popq	%rbp
 	ret
 .L2:
-	nop
+	movq	$0,%rax
+	movq	$str7,%rdi
+	call	printf
+	ret
 .L3:
 	pushq	%rbp
 	movq	%rsp,%rbp
@@ -128,7 +133,39 @@ run_func:
 	popq	%rbp
 	ret
 .L5:
-	nop
+	pushq	%rbp
+	movq	%rsp,%rbp
+	pushq	%rsi
+	pushq	%rdx
+	leaq	-16(%rsp),%rsp
+	movq	$str4,%rdi
+	movq	%rsp,%rsi
+	movq	$0,%rax
+	call	scanf
+
+        movq    $str4,%rdi
+        leaq    1(%rsp),%rsi
+        movq    $0,%rax
+        call    scanf
+
+	movzbq	(%rsp),%rdx
+	movzbq	1(%rsp),%rcx
+	leaq	16(%rsp),%rsp
+
+	popq	%rsi
+	popq	%rdi
+	leaq	-16(%rsp),%rsp
+	call	pstrijcmp
+	
+	movq	%rax,%rsi
+	movq	$0,%rax
+	movq	$str6,%rdi
+	call	printf
+	movq	%rbp,%rsp
+	popq	%rbp
+	ret
+	
+	
 .L6:
 	pushq	%rbp
 	movq	%rsp,%rbp

@@ -89,4 +89,36 @@ swapCase:
 	movq	%rdi,%rax
 	ret
 
-
+.globl  pstrijcmp
+        .type   pstrijcmp,       @function
+pstrijcmp:
+        cmpb    (%rdi),%dl      #check if index are out of strings borders
+        ja      .L11
+        cmpb    (%rdi),%cl
+        ja      .L11
+        cmpb    (%rsi),%dl
+        ja      .L11
+        cmpb    (%rsi),%dl
+        ja      .L11
+.L13:
+	movb	1(%rdi,%rdx,1),%r8b
+	cmpb	%r8b,1(%rsi,%rdx,1)
+	jbe	.L12
+	movq	$-1,%rax
+	ret
+.L12:
+	je	.L14
+	movq	$-1,%rax
+	ret
+.L14:
+	addq	$1,%rdx
+	cmpq	%rdx,%rcx
+	ja	.L13
+	movq	$0,%rax
+	ret
+.L11:
+	movq	$str1,%rdi
+	movq	$0,%rax
+	call	printf
+	movq	$-2,%rax
+	ret

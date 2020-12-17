@@ -12,6 +12,7 @@ str5:	.string	"length: %d, string: %s\n"
 	.quad	.L2	#case 51
 	.quad	.L3	#case 52
 	.quad	.L4	#case 53
+	.quad	.L6	#case 54
 	.quad	.L5	#case 55
 	.quad	.L2	#case 56
 	.quad	.L2	#case 57
@@ -129,4 +130,25 @@ run_func:
 .L5:
 	nop
 .L6:
+	pushq	%rbp
+	movq	%rsp,%rbp
+	movq	%rsi,%rdi
+	pushq	%rdx
+	call	swapCase
+	movq	$str5,%rdi
+	movzbq	(%rax),%rsi
+	leaq	1(%rax),%rdx
+	movq	$0,%rax
+	call	printf
+	popq	%rdi
+	leaq	-8(%rsp),%rsp
+	call 	swapCase
+	movq    $str5,%rdi
+        movzbq  (%rax),%rsi
+        leaq    1(%rax),%rdx
+        movq    $0,%rax
+        call    printf
+	movq	%rbp,%rsp
+	popq	%rbp
 	ret
+	

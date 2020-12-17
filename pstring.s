@@ -58,3 +58,35 @@ pstrijcpy:
 	movq	(%rsp),%rax
 	leaq	16(%rsp),%rsp
 	ret
+
+.globl  swapCase
+        .type   swapCase,	@function
+swapCase:
+	movzbq	(%rdi),%rsi
+	movq	$0,%rdx
+.L9:
+	cmpb	$97,1(%rdi,%rdx,1)	#check if below 'a'
+	jb	.L10
+	cmpb	$122,1(%rdi,%rdx,1)	#check if above 'z'
+	ja	.L10
+	movb	1(%rdi,%rdx,1),%cl
+	subb	$32,%cl			#substract 32 to capitalize letter
+	movb	%cl,1(%rdi,%rdx,1)
+	jmp	.L8
+
+.L10:
+	cmpb    $65,1(%rdi,%rdx,1)      #check if below 'a'
+        jb      .L8
+        cmpb    $90,1(%rdi,%rdx,1)     #check if above 'z'
+        ja      .L8
+        movb    1(%rdi,%rdx,1),%cl
+        addb    $32,%cl                 #substract 32 to capitalize letter
+        movb    %cl,1(%rdi,%rdx,1)
+.L8:
+	addq	$1,%rdx
+	cmpq	%rsi,%rdx
+	jb	.L9
+	movq	%rdi,%rax
+	ret
+
+

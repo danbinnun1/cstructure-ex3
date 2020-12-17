@@ -50,8 +50,11 @@ pstrijcpy:
 	movq	%rdi,%rax
 	ret
 .L6:
+	leaq	-16(%rsp),%rsp
+	movq	%rdi,(%rsp)
 	movq	$str1,%rdi
 	movq	$0,%rax
 	call 	printf
-	movq	%rdi,%rax
+	movq	(%rsp),%rax
+	leaq	16(%rsp),%rsp
 	ret

@@ -3,6 +3,8 @@
 str1:	.string	"first pstring length: %d, second pstring length: %d\n"
 str2:	.string	" %c %c"
 str3:	.string	"old char: %c, new char: %c, first string: %s, second string: %s\n"
+str4:	.string	"%hhu"
+str5:	.string	"length: %d, string: %s\n"
 .align 8
 
 .L10:
@@ -27,6 +29,8 @@ run_func:
 	jmp	*.L10(,%rdi,8)
 
 .L1:
+	pushq	%rbp
+	movq	%rsp,%rbp
 	movq	%rsi,%rdi	#set arg of pstrlen
 	pushq	%rdx		#caller saved register
 	call	pstrlen
@@ -42,10 +46,15 @@ run_func:
 	movq	$str1,%rdi
 	movq	$0,%rax
 	call 	printf
-	jmp	.L6
+	movq	%rbp,%rsp
+	popq	%rbp
+	ret
 .L2:
 	nop
 .L3:
+	pushq	%rbp
+	movq	%rsp,%rbp
+	leaq	-8(%rsp),%rsp
 	pushq	%rdx		#save second str
 	pushq	%rsi		#save first str
 	leaq	-8(%rsp),%rsp	#allocate space for two characters
@@ -77,11 +86,46 @@ run_func:
 	movq	$str3,%rdi
 	leaq	-8(%rsp),%rsp	#set rsp to be 16 align to call printf
 	call	printf
-	leaq	8(%rsp),%rsp	#restore rsp
+	movq	%rbp,%rsp
+	popq	%rbp
 	ret
 	
 .L4:
-	nop
+	pushq	%rbp
+	movq	%rsp,%rbp
+	pushq	%rsi		#save first
+	pushq	%rdx		#save second
+	leaq	-16(%rsp),%rsp
+	movq	$0,%rax
+	movq	$str4,%rdi
+	leaq	1(%rsp),%rsi	#scan i
+	call	scanf
+	movq	$0,%rax
+	movq	$str4,%rdi
+	movq	%rsp,%rsi	#scan j
+	call 	scanf
+	movzbq	1(%rsp),%rdx	#put i in third arg
+	movzbq	(%rsp),%rcx	#put j in fourth arg
+	leaq	16(%rsp),%rsp
+	popq	%rsi		#put src in second arg
+	popq	%rdi		#put dest in first arg
+	pushq	%rsi		#save src
+	leaq	-8(%rsp),%rsp
+	call 	pstrijcpy
+	movq	$str5,%rdi
+	movzbq	(%rax),%rsi	#put dest length in second arg of printf
+	leaq	1(%rax),%rdx	#put dest string pointer in third arg of printf
+	movq	$0,%rax
+	call	printf
+	leaq	8(%rsp),%rsp
+	popq	%rdx		#get src
+	movq	$str5,%rdi
+	movzbq	(%rdx),%rsi	#put src length in second arg of printf
+	leaq	1(%rdx),%rdx	#put src string pointer in third arg of printf
+	call	printf
+	movq	%rbp,%rsp
+	popq	%rbp
+	ret
 .L5:
 	nop
 .L6:

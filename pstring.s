@@ -31,13 +31,13 @@ replaceChar:
 	.type	pstrijcpy,	@function
 pstrijcpy:
 	cmpb	(%rdi),%dl	#check if index are out of strings borders
-	ja	.L6
+	jae	.L6
 	cmpb	(%rdi),%cl
-	ja	.L6
+	jae	.L6
 	cmpb	(%rsi),%dl
-	ja	.L6
+	jae	.L6
 	cmpb	(%rsi),%dl
-	ja	.L6
+	jae	.L6
 	jmp	.L4
 .L5:
 	movzbq	%dl,%rdx		#load loop index
@@ -113,7 +113,7 @@ pstrijcmp:
 .L14:
 	addq	$1,%rdx
 	cmpq	%rdx,%rcx
-	ja	.L13
+	jae	.L13
 	movq	$0,%rax
 	ret
 .L11:

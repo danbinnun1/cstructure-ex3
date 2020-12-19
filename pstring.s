@@ -1,6 +1,6 @@
 .section	.rodata
 
-str1:	.string	"invalid input\n"
+str1:	.string	"invalid input!\n"
 
 	.text
 .globl	pstrlen
@@ -108,7 +108,7 @@ pstrijcmp:
 	ret
 .L12:
 	je	.L14
-	movq	$-1,%rax
+	movq	$1,%rax
 	ret
 .L14:
 	addq	$1,%rdx

@@ -91,6 +91,7 @@ run_func:
 	leaq	1(%rax),%rcx	#set fourth arg of printf to first string result
 	movq	$str3,%rdi
 	leaq	-8(%rsp),%rsp	#set rsp to be 16 align to call printf
+	movq	$0,%rax
 	call	printf
 	movq	%rbp,%rsp
 	popq	%rbp
@@ -128,6 +129,7 @@ run_func:
 	movq	$str5,%rdi
 	movzbq	(%rdx),%rsi	#put src length in second arg of printf
 	leaq	1(%rdx),%rdx	#put src string pointer in third arg of printf
+	movq	$0,%rax
 	call	printf
 	movq	%rbp,%rsp
 	popq	%rbp

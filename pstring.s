@@ -38,7 +38,7 @@ pstrijcpy:
 	jae	.L6
 	cmpb	(%rsi),%dl
 	jae	.L6
-	cmpb	(%rsi),%dl
+	cmpb	(%rsi),%cl
 	jae	.L6
 	jmp	.L4
 .L5:

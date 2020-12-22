@@ -1,3 +1,5 @@
+#	214289415 dan binnun
+
 .section	.rodata
 
 str1:	.string	"invalid input!\n"
@@ -98,7 +100,7 @@ pstrijcmp:
         jae     .L11
         cmpb    (%rsi),%dl
         jae     .L11
-        cmpb    (%rsi),%dl
+        cmpb    (%rsi),%cl
         jae     .L11
 .L13:
 	movb	1(%rdi,%rdx,1),%r8b

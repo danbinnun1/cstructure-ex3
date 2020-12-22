@@ -1,3 +1,4 @@
+#	214289415 dan binnun
 	.section	.rodata
 str1:	.string		"%hhu"
 str2:	.string		"%s"

@@ -1,3 +1,4 @@
+#	214289415 dan binnun
 .section	.rodata
 
 str1:	.string	"first pstring length: %d, second pstring length: %d\n"
